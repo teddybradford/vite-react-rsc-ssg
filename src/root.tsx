@@ -1,3 +1,4 @@
+import './root.css'
 import { Counter } from './counter'
 
 async function getPosts() {
