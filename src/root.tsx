@@ -1,11 +1,11 @@
 import './root.css'
 import { Counter } from './counter'
 
-async function getPosts() {
-  let glob = import.meta.glob('./posts/*.mdx', { eager: true })
+async function getPages() {
+  let glob = import.meta.glob('./pages/*.mdx', { eager: true })
   glob = Object.fromEntries(
     Object.entries(glob).map(([k, v]) => [
-      k.slice('./posts'.length, -'.mdx'.length),
+      k.slice('./pages'.length, -'.mdx'.length),
       v,
     ]),
   )
@@ -13,18 +13,18 @@ async function getPosts() {
 }
 
 export async function getStaticPaths() {
-  const posts = await getPosts()
-  return ['/', ...Object.keys(posts)]
+  const pages = await getPages()
+  return ['/', ...Object.keys(pages)]
 }
 
 export async function Root({ url }: { url: URL }) {
-  const posts = await getPosts()
+  const pages = await getPages()
 
   async function RootContent() {
     if (url.pathname === '/') {
       return (
         <ul>
-          {Object.entries(posts).map(([key, value]) => (
+          {Object.entries(pages).map(([key, value]) => (
             <li key={key}>
               <a href={key} style={{ textTransform: 'capitalize' }}>
                 {(value as any).title ?? key.slice(1)}
@@ -35,7 +35,7 @@ export async function Root({ url }: { url: URL }) {
       )
     }
 
-    const module = posts[url.pathname]
+    const module = pages[url.pathname]
     if (!!module) {
       const Component = (module as any).default
       return <Component />
