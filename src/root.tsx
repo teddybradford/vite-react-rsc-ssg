@@ -2,10 +2,10 @@ import './root.css'
 import { Counter } from './counter'
 
 async function getPages() {
-  let glob = import.meta.glob('./pages/*.mdx', { eager: true })
+  let glob = import.meta.glob('./pages/*.{mdx,tsx}', { eager: true })
   glob = Object.fromEntries(
     Object.entries(glob).map(([k, v]) => [
-      k.slice('./pages'.length, -'.mdx'.length),
+      k.substring('./pages'.length, k.lastIndexOf('.')),
       v,
     ]),
   )
